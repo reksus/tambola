@@ -1,0 +1,153 @@
+html {
+  box-sizing: border-box;
+}
+
+*, *:before, *:after {
+  box-sizing: inherit;
+}
+body {
+  background-image: linear-gradient(260deg, #2376ae 0%, #c16ecf 100%);
+  min-height: 100vh;
+}
+
+.master-list-wrapper {
+  max-width: 60%;
+  margin: 0 auto;
+}
+.master-list {
+  display: flex;
+  flex-flow: row wrap;
+  justify-content: flex-start;
+}
+
+.master-list .box {
+  flex: 0 1 10%;
+  padding: .2rem .3rem;
+  font-size: .7rem;
+  display: flex;
+  justify-content: center;
+  background: rgba(0, 0, 0, .3);
+  color: white;
+  font-weight: 300;
+}
+
+.master-list .lighten {
+  background: rgba(200, 200, 200, .5);
+  color: #000000;
+  font-weight: 900;
+}
+
+.btn {
+  display: block;
+  text-decoration: none;
+  background:#FEFF00;
+  padding:10px;
+  color:black;
+  font-weight: 700;
+  border-radius:4px;
+  margin: 20px auto;
+}
+
+.start-btn {
+  display: none;
+}
+
+.ticket-wrapper {
+  width: 45%;
+  margin: 0 auto;
+  background: rgba(255, 255, 255, .4);
+  border: 1px solid goldenrod;
+}
+
+.current-number {
+  width: 50%;
+  margin: 0 auto;
+  padding: .5rem 1rem;
+  text-align: center;
+  font-weight: 700;
+  color: black;
+  display: flex;
+  flex-direction: column;
+  display: none;
+}
+
+.current-number span:first-child {
+  font-size: .9rem;
+  font-weight: 300;
+}
+.current-number span:last-child {
+  font-size: 1.7rem;
+  font-weight: 700;
+}
+
+.ticket {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.ticket .box {
+  flex: 1 1 11.11%;
+  border: 1px solid green;
+  display: flex;
+  justify-content: center;
+  line-height: 1.5rem;
+}
+
+.ticket .box.marked {
+  background: rgba(200, 200, 200, .9);
+  color: #000000;
+  font-weight: 900;
+}
+
+.winning-combo {
+  margin: 0 auto;
+  display: flex;
+  flex-flow: row wrap;
+  justify-content: space-around;
+  max-width: 60%;
+  /* border: 2px solid goldenrod; */
+}
+
+.winning-combo-btn {
+  display: none;
+  font-size: .8rem;
+  padding: 5px;
+  margin: 15px 2px 15px 2px;
+}
+
+.prizes-wrapper {
+  max-width: 50%;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: row;
+  text-align: center;
+  font-weight: 700;
+}
+.prizes-wrapper p {
+  font-size: 1.4rem;
+  flex-basis: 50%;
+  align-self: center;
+}
+.prizes-wrapper ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  flex-basis: 50%;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+}
+
+.prizes-wrapper ul li {
+  border-bottom: 1px solid black;
+  border-radius: 2px;
+  padding: 2px;
+  background: rgba(255, 255, 255, .4);
+  font-size: .8rem;
+  color: rgba(0, 0, 0, .8);
+  flex-basis: 100%;
+}
+
+.prizes-wrapper ul li:last-child {
+  border: none;
+}

@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Tambola</title>
+  <link rel="stylesheet" href="src/css/index.css">
+</head>
+<body>
+  <div class="app-wrapper">
+    <div class="master-list-wrapper">
+      <div class="master-list"></div>
+    </div>
+
+    <button class="btn generate-ticket-btn">Generate Ticket</button>
+    <button class="btn start-btn">Start</button>
+
+    
+    <div class="ticket-wrapper">  
+      <div class="current-number">
+        <span class="title">Current Number</span>
+        <span class="number">--</span>
+      </div>
+      <div class="ticket"></div>
+    </div>
+
+    <div class="winning-combo-wrapper">
+      <div class="winning-combo">
+        <button class="btn winning-combo-btn" data-check-type="ef">Early five</button>
+        <button class="btn winning-combo-btn" data-check-type="fr">First row</button>
+        <button class="btn winning-combo-btn" data-check-type="sr">Second row</button>
+        <button class="btn winning-combo-btn" data-check-type="tr">Third row</button>
+        <button class="btn winning-combo-btn" data-check-type="fh">Full House</button>
+      </div>
+    </div>
+
+    <div class="prizes-wrapper">
+      <p class="prizes-title">Prizes Won:</p>
+      <ul>
+        <li class="no-prize">No prizes won yet !</li>
+      </ul>
+    </div>
+  </div>
+  <script src="src/js/main.js"></script>
+</body>
+</html>
