@@ -26,6 +26,7 @@ body {
   flex: 0 1 10%;
   padding: .2rem .3rem;
   font-size: .7rem;
+  line-height: 1.2rem;
   display: flex;
   justify-content: center;
   background: rgba(0, 0, 0, .3);
@@ -59,6 +60,7 @@ body {
   margin: 0 auto;
   background: rgba(255, 255, 255, .4);
   border: 1px solid goldenrod;
+  display: none;
 }
 
 .current-number {
@@ -70,7 +72,6 @@ body {
   color: black;
   display: flex;
   flex-direction: column;
-  display: none;
 }
 
 .current-number span:first-child {
@@ -102,17 +103,16 @@ body {
 }
 
 .winning-combo {
+  display: none;
   margin: 0 auto;
-  display: flex;
   flex-flow: row wrap;
   justify-content: space-around;
 }
 
 .winning-combo-btn {
-  display: none;
   font-size: .8rem;
   padding: 5px;
-  margin: 15px 2px 15px 2px;
+  margin: 5px 1px 5px 1px;
 }
 
 .prizes-wrapper {

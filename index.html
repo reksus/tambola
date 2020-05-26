@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Tambola</title>
   <link rel="stylesheet" href="src/css/index.css">
+  <script src="https://kit.fontawesome.com/b0d1a7d59a.js" crossorigin="anonymous"></script>
 </head>
 <body>
   <div class="app-wrapper">
@@ -14,9 +15,16 @@
 
     <button class="btn generate-ticket-btn">Generate Ticket</button>
     <button class="btn start-btn">Start</button>
-
+    <div class="controls">
+      <button class="ctrl-btn"><i class="fas fa-microphone"></i></button>
+      <button class="ctrl-btn"><i class="fas fa-microphone-slash"></i></button>
+      <button class="ctrl-btn">Pause Callout</button>
+      <button class="ctrl-btn">Callout Autopilot</button>
+      <input type="range" name="callOutSpeed" min="5000" max="10000">
+    </div>
+    <button class="ctrl-btn">Reset Game</button>
     
-    <div class="ticket-wrapper">  
+    <div class="ticket-wrapper">
       <div class="current-number">
         <span class="title">Current Number</span>
         <span class="number">--</span>
@@ -26,10 +34,12 @@
 
     <div class="winning-combo-wrapper">
       <div class="winning-combo">
+        <button class="btn winning-combo-btn" data-check-type="fr">1<sup>st</sup> row</button>
+        <button class="btn winning-combo-btn" data-check-type="sr">2<sup>nd</sup> row</button>
+        <button class="btn winning-combo-btn" data-check-type="tr">3<sup>rd</sup> row</button>
+        <button class="btn winning-combo-btn" data-check-type="be">Bull's Eye</button>
         <button class="btn winning-combo-btn" data-check-type="ef">Early five</button>
-        <button class="btn winning-combo-btn" data-check-type="fr">First row</button>
-        <button class="btn winning-combo-btn" data-check-type="sr">Second row</button>
-        <button class="btn winning-combo-btn" data-check-type="tr">Third row</button>
+        <button class="btn winning-combo-btn" data-check-type="cr">Corners</button>
         <button class="btn winning-combo-btn" data-check-type="fh">Full House</button>
       </div>
     </div>

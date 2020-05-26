@@ -1,24 +1,31 @@
 const masterList = document.querySelector('.master-list')
+const ticketWrapper = document.querySelector('.ticket-wrapper')
 const ticket = document.querySelector('.ticket')
 const generateTicketBtn = document.querySelector('.generate-ticket-btn')
 const startBtn = document.querySelector('.start-btn')
 const currentNumber = document.querySelector('.current-number')
-const winningComboBtns = document.querySelectorAll('.winning-combo-btn')
+const winningCombo = document.querySelector('.winning-combo')
+const winningComboBtns = winningCombo.querySelectorAll('.winning-combo-btn')
 const prizesWrapper = document.querySelector('.prizes-wrapper')
 const prizesList = prizesWrapper.querySelector('ul')
 const noPrize = prizesWrapper.querySelector('.no-prize')
 
-let n = 90
-let setOfNumbers = [...Array(n).keys()].map(x => x + 1)
+let tambolaNumbersCount = 90
+let ticketRows = 3
+let ticketCols = 9
+let callingOutIntervalTime = 5000
+let setOfNumbers = [...Array(tambolaNumbersCount).keys()].map(x => x + 1)
 let setOfCalledOutNumbers = []
 let setOfRemainingNumbers = [...setOfNumbers]
 
-window.onload = createMasterList(n=90)
-generateTicketBtn.addEventListener('click', () => generateTicket(3, 9))
+let randomNumberCalloutInterval
+
+window.onload = createMasterList(tambolaNumbersCount)
+generateTicketBtn.addEventListener('click', managePlayingArea)
 startBtn.addEventListener('click', startGame)
 
 function startGame() {
-  callOutRandomNumber(5000)
+  callOutRandomNumber(callingOutIntervalTime) 
 }
 function createMasterList(n) {
   for (let i = 1; i <= n; i++) {
@@ -27,37 +34,33 @@ function createMasterList(n) {
     box.classList.add(`box${i}`)
     const boxNumber = document.createElement('span')
     boxNumber.textContent = i
-    boxNumber.style.display = 'block'
     box.appendChild(boxNumber)
     masterList.appendChild(box)
   }
 }
-function generateTicket(rows=3, cols=9) {
-  // this part should not come here
-  currentNumber.style.display = 'flex'
-  currentNumber.style.flexDirection = 'column'
-
-  generateTicketBtn.disabled = true
-  generateTicketBoxes(rows, cols)
-
-  const ticketArray = [Array(cols), Array(cols), Array(cols)]
-  markPositionsToInsert(ticketArray, rows, cols)
-  insertRandomNumbersInTheTicket(ticketArray, rows, cols)
+function managePlayingArea() {
+  generateTicketBoxElements(ticketRows, ticketCols)
+  const ticketArray = generateTicketArray(ticketRows, ticketCols)
   const ticketBoxes = ticket.querySelectorAll('.box')
-
   ticketBoxes.forEach((box, index) => {
-    const content = ticketArray[Math.floor((index)/cols)][(index)%9]
+    const content = ticketArray[Math.floor((index)/ticketCols)][(index)%ticketCols]
     box.textContent = content == "--" ? "" : content
     box.addEventListener('click', handleTicketBoxClick)
-  });
-  winningComboBtns.forEach(btn => {
-    btn.addEventListener('click', function() {
-    checkWinningCombo(this, rows, cols)
-    })
-    btn.style.display = 'block'
   })
+  winningComboBtns.forEach(btn => btn.addEventListener('click', checkPattern))
+  ticketWrapper.style.display = 'block'
   generateTicketBtn.style.display = 'none'
   startBtn.style.display = 'block'
+  winningCombo.style.display = 'flex'
+}
+function generateTicketArray(rows, cols) {
+  const ticketArray = []
+  for (let i = 0; i < rows; i++) {
+    ticketArray.push(Array(cols))
+  }
+  markPositionsToInsert(ticketArray, rows, cols)
+  insertRandomNumbersInTheTicket(ticketArray, rows, cols)
+  return ticketArray
 }
 function handleTicketBoxClick(e) {
   if (this.textContent) {
@@ -73,7 +76,7 @@ function toggleMarked(ticketBox) {
 }
 function callOutRandomNumber(interval=5000) {
   const number = currentNumber.querySelector('.number')
-  const randomNumberCalloutInterval = setInterval(() => {
+  randomNumberCalloutInterval = setInterval(() => {
     const len = setOfRemainingNumbers.length
     const randIdx = Math.floor(Math.random() * len)
     const [calledOutNumber] = setOfRemainingNumbers.splice(randIdx, 1)
@@ -112,16 +115,12 @@ function speakTheNumber(n) {
 
   }
 }
-function generateTicketBoxes(rows, cols) {
+function generateTicketBoxElements(rows, cols) {
   for (let i = 0; i < rows; i++) {
     for (let j = 0; j < cols; j++) {
       const box = document.createElement('div')
       box.classList.add('box')
       box.classList.add(`box${cols*i+j+1}`)
-      const boxNumber = document.createElement('span')
-      boxNumber.style.display = 'block'
-      boxNumber.textContent = '-'
-      box.appendChild(boxNumber)
       ticket.appendChild(box)
     }
   }
@@ -192,32 +191,53 @@ function insertRandomNumbersInTheTicket(ticket, rows, cols) {
     for (let j = 0; j < rows; j++) {
       if (ticket[j][i] === 1) {
         let x = tempArr.shift()
-        ticket[j][i] = x >= 10 ? x.toString() : '0'+x
-      }
-      else {
-        ticket[j][i] = '--'
+        ticket[j][i] = x
+      } else {
+        ticket[j][i] = ""
       }
     }
   }
 }
-function checkWinningCombo(winningComboBox, rows, cols) {
-  const checkType = winningComboBox.dataset.checkType
+function checkPattern() {
+  const checkType = this.dataset.checkType
+  let isPattern = false
+  let message
   switch (checkType) {
     case "ef": 
-      handleCheckEarlyFive()
+      isPattern = checkEarlyFive()
+      message = "Yay! You've got Early Five."
       break
     case "fr": 
-      handleCheckRow(1, cols)
+      isPattern = checkRow(1, ticketCols)
+      message = "Hurray! You've got the first row."
       break
-      case "sr": 
-      handleCheckRow(2, cols)
+    case "sr": 
+      isPattern = checkRow(2, ticketCols)
+      message = "Huzza! You've got the second row."
       break
-      case "tr": 
-      handleCheckRow(3, cols)
+    case "tr": 
+      isPattern = checkRow(3, ticketCols)
+      message = "Whoopee! You've got the third row."
       break
     case "fh": 
-      handleCheckFullHouse(rows, cols)
+      isPattern = checkFullHouse(ticketRows, ticketCols)
+      message = "Yippie! You've got the full ."
       break
+    case "be": 
+      isPattern = checkBullsEye(ticketRows, ticketCols)
+      message = "Hip-Hip! You've hit the bull's eye"
+      break
+    case "cr": 
+      isPattern = checkCorners(ticketRows, ticketCols)
+      message = "Rah Rah! You've got all the corners"
+      break
+  }
+  if (!winItemInList(checkType) && isPattern) {
+    noPrize.style.display = 'none'
+    const prize = document.createElement('li')
+    prize.classList.add(checkType)
+    prize.textContent = message
+    prizesList.appendChild(prize)
   }
 }
 function winItemInList(itemType) {
@@ -230,55 +250,6 @@ function winItemInList(itemType) {
   });
   return wonItemInList
 }
-function handleCheckEarlyFive() {
-  if (!winItemInList('ef') && checkEarlyFive()) {
-    noPrize.style.display = 'none'
-    const earlyFivePrize = document.createElement('li')
-    earlyFivePrize.classList.add('ef')
-    earlyFivePrize.textContent = "Yay! You've got Early Five."
-    prizesList.appendChild(earlyFivePrize)
-    console.log("early five")
-  }
-}
-function handleCheckRow(row, cols) {
-  if (checkRow(row, cols)) {
-    const rowPrize = document.createElement('li')
-    if (parseInt(row) === 1) {
-      if (!winItemInList('fr')) {
-        noPrize.style.display = 'none'
-        rowPrize.classList.add('fr')
-        rowPrize.textContent = "Hurray! You've got the first row."
-        prizesList.appendChild(rowPrize)
-      }
-    }
-    if (parseInt(row) === 2) {
-      if (!winItemInList('sr')) {
-        noPrize.style.display = 'none'
-        rowPrize.classList.add('sr')
-        rowPrize.textContent = "Huzza! You've got the second row."
-        prizesList.appendChild(rowPrize)
-      }
-    }
-    if (parseInt(row) === 3) {
-      if (!winItemInList('tr')) {
-        noPrize.style.display = 'none'
-        rowPrize.classList.add('tr')
-        rowPrize.textContent = "Whoopee! You've got the third row."
-        prizesList.appendChild(rowPrize)
-      }
-    }
-  }
-}
-function handleCheckFullHouse(row) {
-  if (!winItemInList('fh') && checkFullHouse()) {
-    noPrize.style.display = 'none'
-    const fullHousePrize = document.createElement('li')
-    fullHousePrize.classList.add('fh')
-    fullHousePrize.textContent = "Yippie! You've got the full ."
-    prizesList.appendChild(fullHousePrize)
-    console.log("full house")
-  }
-} 
 function checkEarlyFive() {
   const ticketBoxes = document.querySelectorAll('.ticket .box')
   let count = 0
@@ -310,4 +281,47 @@ function checkFullHouse(rows, cols) {
     isFullHouse = isFullHouse && checkRow(i, cols)
   }
   return isFullHouse
+}
+function checkBullsEye(rows, cols) {
+  const ticketBoxes = ticket.querySelectorAll('.box')
+  let count = 0
+  for (let i = 0; i < cols; i++) {
+    const box = ticketBoxes[cols+i]
+    const content = box.textContent
+    if (content) {
+      count++
+    }
+    if (count == 3) {
+      if (box.classList.contains('marked') && setOfCalledOutNumbers.includes(parseInt(content))) {
+        return true
+      }
+      else {
+        return false
+      }
+    }
+  }
+}
+function checkCorners(rows, cols) {
+  const cornerBoxes = []
+  const ticketBoxes = ticket.querySelectorAll('.box')
+  let count = 0
+  let prevCount = 0
+  for (let i = 0; i < rows*cols; i++) {
+    const box = ticketBoxes[i]
+    if (!box.textContent == "") {
+      count++
+    }
+    if (count === 1 && count !== prevCount ) cornerBoxes.push(box)
+    if (count === 5 && count !== prevCount) cornerBoxes.push(box)
+    if (count === 11 && count !== prevCount) cornerBoxes.push(box)
+    if (count === 15 && count !== prevCount) cornerBoxes.push(box)
+    prevCount = count
+  }
+  areCorners = true
+  cornerBoxes.forEach(box => {
+    if (!box.classList.contains('marked') || !setOfCalledOutNumbers.includes(parseInt(box.textContent))) {
+      areCorners = false
+    }
+  })
+  return areCorners
 }
