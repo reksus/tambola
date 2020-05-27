@@ -9,6 +9,7 @@ const currentNumber = document.querySelector('.current-number')
 const playingArena = document.querySelector('.playing-arena')
 
 const controls = document.querySelector('.controls')
+const toggleSoundBtn = controls.querySelector('.toggle-sound')
 const resetBtn = controls.querySelector('.reset')
 
 const ticketWrapper = document.querySelector('.ticket-wrapper')
@@ -23,21 +24,22 @@ const noPrize = prizesWrapper.querySelector('.no-prize')
 let tambolaNumbersCount = 90
 let ticketRows = 3
 let ticketCols = 9
-let callingOutIntervalTime = 10
+let callingOutIntervalTime = 5000
 let setOfNumbers = [...Array(tambolaNumbersCount).keys()].map(x => x + 1)
 let setOfCalledOutNumbers = []
 let setOfRemainingNumbers = [...setOfNumbers]
 
 let randomNumberCalloutInterval
 
+let toSpeak = true
 window.onload = createMasterList(tambolaNumbersCount)
 generateTicketBtn.addEventListener('click', managePlayingArea)
 startBtn.addEventListener('click', startGame)
 
-// event listeners
+// EVENT LISTENERS
 winningComboBtns.forEach(btn => btn.addEventListener('click', checkPattern))
 resetBtn.addEventListener('click', reset)
-
+toggleSoundBtn.addEventListener('click', toggleSound)
 
 function startGame() {
   callOutRandomNumber(callingOutIntervalTime) 
@@ -92,7 +94,7 @@ function toggleMarked(ticketBox) {
     ticketBox.classList.add('marked')
   }
 }
-function callOutRandomNumber(interval=5000) {
+function callOutRandomNumber(interval) {
   randomNumberCalloutInterval = setInterval(() => {
     const len = setOfRemainingNumbers.length
     const randIdx = Math.floor(Math.random() * len)
@@ -100,7 +102,9 @@ function callOutRandomNumber(interval=5000) {
     setOfCalledOutNumbers.push(calledOutNumber)
     
     // // convert number to voice 
-    speakTheNumber(calledOutNumber)
+    if (toSpeak) {
+      speakTheNumber(calledOutNumber)
+    }
 
     currentNumber.textContent = calledOutNumber
     // Mark the called out nummber in the master list 
@@ -129,7 +133,6 @@ function speakTheNumber(n) {
     speechSynthesis.speak(utterance1)
     speechSynthesis.speak(utterance2)
     speechSynthesis.speak(utterance3)
-
   }
 }
 function generateTicketBoxElements(rows, cols) {
@@ -349,6 +352,8 @@ function checkCorners(rows, cols) {
   return areCorners
 }
 function reset() {
+  speechSynthesis.cancel()
+  clearInterval(randomNumberCalloutInterval)
   setOfNumbers = [...Array(tambolaNumbersCount).keys()].map(x => x + 1)
   setOfCalledOutNumbers = []
   setOfRemainingNumbers = [...setOfNumbers]
@@ -360,4 +365,13 @@ function reset() {
   playingArena.style.display = 'none'
   ticket.textContent = ''
   prizesList.textContent = ''
+  currentNumber.textContent = '--'
+}
+function toggleSound() {
+  toSpeak = !toSpeak
+  if (toSpeak) {
+    toggleSoundBtn.textContent = 'turn off sound'
+  } else {
+    toggleSoundBtn.textContent = 'turn on sound'
+  }
 }
