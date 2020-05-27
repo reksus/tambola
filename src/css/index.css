@@ -3,17 +3,23 @@ html {
 }
 
 *, *:before, *:after {
+  margin: 0;
+  padding: 0;
   box-sizing: inherit;
 }
 body {
   background-image: linear-gradient(260deg, #2376ae 0%, #c16ecf 100%);
   min-height: 100vh;
+  text-align: center;
 }
 
 .app-wrapper {
-  width: 90vw;
+  width: 95vw;
   margin: 0 auto;
   margin-top: 20px;
+}
+.app-title {
+  margin: 1rem 0 1rem;
 }
 
 .master-list {
@@ -21,12 +27,16 @@ body {
   flex-flow: row wrap;
   justify-content: flex-start;
 }
+.master-list-title {
+  padding: .5rem 0 .5rem;
+  font-size: 1.4rem;
+}
 
 .master-list .box {
   flex: 0 1 10%;
   padding: .2rem .3rem;
   font-size: .7rem;
-  line-height: 1.2rem;
+  letter-spacing: .1rem;
   display: flex;
   justify-content: center;
   background: rgba(0, 0, 0, .3);
@@ -48,23 +58,27 @@ body {
   color:black;
   font-weight: 700;
   border-radius:4px;
-  margin: 20px auto;
+}
+
+
+.generate-ticket-btn {
+  margin: 50px auto 20px;
+  width: 130px;
 }
 
 .start-btn {
   display: none;
+  width:130px;
+  margin: 50px auto 20px;
 }
 
-.ticket-wrapper {
-  width: 80%;
-  margin: 0 auto;
-  background: rgba(255, 255, 255, .4);
-  border: 1px solid goldenrod;
+.playing-arena {
   display: none;
+  flex-wrap: wrap;
 }
 
-.current-number {
-  width: 50%;
+.current-number-wrapper {
+  flex: 1 0 100%;
   margin: 0 auto;
   padding: .5rem 1rem;
   text-align: center;
@@ -74,13 +88,41 @@ body {
   flex-direction: column;
 }
 
-.current-number span:first-child {
+.current-number-title {
   font-size: .9rem;
   font-weight: 300;
 }
-.current-number span:last-child {
+.current-number {
   font-size: 1.7rem;
   font-weight: 700;
+}
+
+.playing-arena .controls {
+  flex: 1 1 20%;
+  display: flex;
+  flex-flow: column wrap;
+}
+
+.playing-arena .controls > * {
+  background: orange;
+  height: 30px;
+  font-weight: 700;
+}
+
+.playing-arena .controls .controls-heading {
+  background: white;
+  margin-bottom: 15px;
+  line-height: 150%;
+}
+
+.playing-arena .ticket-wrapper {
+  flex: 1 1 80%;
+  padding: 30px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  background: rgba(255, 255, 255, .4);
 }
 
 .ticket {
@@ -89,8 +131,8 @@ body {
 }
 
 .ticket .box {
+  border: 1px solid rgba(255, 255, 255, 1);
   flex: 1 1 11.11%;
-  border: 1px solid green;
   display: flex;
   justify-content: center;
   line-height: 1.5rem;
@@ -103,8 +145,8 @@ body {
 }
 
 .winning-combo {
-  display: none;
   margin: 0 auto;
+  display: flex;
   flex-flow: row wrap;
   justify-content: space-around;
 }
@@ -112,7 +154,7 @@ body {
 .winning-combo-btn {
   font-size: .8rem;
   padding: 5px;
-  margin: 5px 1px 5px 1px;
+  margin-top: 35px;
 }
 
 .prizes-wrapper {
@@ -149,4 +191,9 @@ body {
 
 .prizes-wrapper ul li:last-child {
   border: none;
+}
+
+/* check its position in the file */
+.btn:disabled {
+  background: grey;
 }

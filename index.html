@@ -9,45 +9,51 @@
 </head>
 <body>
   <div class="app-wrapper">
+    <h1 class="app-title">Tambola App</h1>
     <div class="master-list-wrapper">
+      <h2 class="master-list-title">Fortune List !!!</h2>
       <div class="master-list"></div>
     </div>
-
-    <button class="btn generate-ticket-btn">Generate Ticket</button>
-    <button class="btn start-btn">Start</button>
-    <div class="controls">
-      <button class="ctrl-btn"><i class="fas fa-microphone"></i></button>
-      <button class="ctrl-btn"><i class="fas fa-microphone-slash"></i></button>
-      <button class="ctrl-btn">Pause Callout</button>
-      <button class="ctrl-btn">Callout Autopilot</button>
-      <input type="range" name="callOutSpeed" min="5000" max="10000">
-    </div>
-    <button class="ctrl-btn">Reset Game</button>
     
-    <div class="ticket-wrapper">
-      <div class="current-number">
-        <span class="title">Current Number</span>
-        <span class="number">--</span>
-      </div>
-      <div class="ticket"></div>
-    </div>
+    <button type = "button" class="btn generate-ticket-btn">Generate Ticket</button>
+    <button class="btn start-btn">Start</button>
 
-    <div class="winning-combo-wrapper">
-      <div class="winning-combo">
-        <button class="btn winning-combo-btn" data-check-type="fr">1<sup>st</sup> row</button>
-        <button class="btn winning-combo-btn" data-check-type="sr">2<sup>nd</sup> row</button>
-        <button class="btn winning-combo-btn" data-check-type="tr">3<sup>rd</sup> row</button>
-        <button class="btn winning-combo-btn" data-check-type="be">Bull's Eye</button>
-        <button class="btn winning-combo-btn" data-check-type="ef">Early five</button>
-        <button class="btn winning-combo-btn" data-check-type="cr">Corners</button>
-        <button class="btn winning-combo-btn" data-check-type="fh">Full House</button>
+    <section class="playing-arena">
+      
+      <div class="current-number-wrapper">
+        <span class="current-number-title">Current Number</span>
+        <span class="current-number">--</span>
       </div>
-    </div>
 
+      <section class="controls">
+        <!-- <button class="btn settings-btn"><i class="fas fa-cog"></i></button> -->
+        <h3 class="controls-heading">Basic Controls</h3>
+        <button class="btn ctrl-btn sound" disabled><i class="fas fa-microphone"></i></button>
+        <button class="btn ctrl-btn nosound" disabled><i class="fas fa-microphone-slash"></i></button>
+        <button class="btn ctrl-btn pausesound" disabled>Pause Callout</button>
+        <button class="btn ctrl-btn autopilotcallout" disabled>Callout Autopilot</button>
+        <input type="range" name="callOutSpeed" min="5000" max="10000" disabled>
+        <button class="btn ctrl-btn reset">Reset Game</button>
+      </section>
+
+      <section class="ticket-wrapper">
+        <div class="ticket"></div>
+        <section class="winning-combo">
+          <button class="btn winning-combo-btn" data-check-type="fr">1<sup>st</sup> row</button>
+          <button class="btn winning-combo-btn" data-check-type="sr">2<sup>nd</sup> row</button>
+          <button class="btn winning-combo-btn" data-check-type="tr">3<sup>rd</sup> row</button>
+          <button class="btn winning-combo-btn" data-check-type="be">Bull's Eye</button>
+          <button class="btn winning-combo-btn" data-check-type="ef">Early five</button>
+          <button class="btn winning-combo-btn" data-check-type="cr">Corners</button>
+          <button class="btn winning-combo-btn" data-check-type="fh">Full House</button>
+        </section>
+      </section>
+
+    </section>
     <div class="prizes-wrapper">
       <p class="prizes-title">Prizes Won:</p>
       <ul>
-        <li class="no-prize">No prizes won yet !</li>
+        <!-- <li class="no-prize">No prizes won yet !</li> -->
       </ul>
     </div>
   </div>

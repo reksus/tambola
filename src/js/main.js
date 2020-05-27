@@ -1,11 +1,21 @@
 const masterList = document.querySelector('.master-list')
-const ticketWrapper = document.querySelector('.ticket-wrapper')
-const ticket = document.querySelector('.ticket')
+const masterListBoxes = masterList.childNodes
+
 const generateTicketBtn = document.querySelector('.generate-ticket-btn')
 const startBtn = document.querySelector('.start-btn')
+
 const currentNumber = document.querySelector('.current-number')
+
+const playingArena = document.querySelector('.playing-arena')
+
+const controls = document.querySelector('.controls')
+const resetBtn = controls.querySelector('.reset')
+
+const ticketWrapper = document.querySelector('.ticket-wrapper')
+const ticket = document.querySelector('.ticket')
 const winningCombo = document.querySelector('.winning-combo')
 const winningComboBtns = winningCombo.querySelectorAll('.winning-combo-btn')
+
 const prizesWrapper = document.querySelector('.prizes-wrapper')
 const prizesList = prizesWrapper.querySelector('ul')
 const noPrize = prizesWrapper.querySelector('.no-prize')
@@ -13,7 +23,7 @@ const noPrize = prizesWrapper.querySelector('.no-prize')
 let tambolaNumbersCount = 90
 let ticketRows = 3
 let ticketCols = 9
-let callingOutIntervalTime = 5000
+let callingOutIntervalTime = 10
 let setOfNumbers = [...Array(tambolaNumbersCount).keys()].map(x => x + 1)
 let setOfCalledOutNumbers = []
 let setOfRemainingNumbers = [...setOfNumbers]
@@ -23,6 +33,11 @@ let randomNumberCalloutInterval
 window.onload = createMasterList(tambolaNumbersCount)
 generateTicketBtn.addEventListener('click', managePlayingArea)
 startBtn.addEventListener('click', startGame)
+
+// event listeners
+winningComboBtns.forEach(btn => btn.addEventListener('click', checkPattern))
+resetBtn.addEventListener('click', reset)
+
 
 function startGame() {
   callOutRandomNumber(callingOutIntervalTime) 
@@ -39,6 +54,11 @@ function createMasterList(n) {
   }
 }
 function managePlayingArea() {
+
+  generateTicketBtn.style.display = 'none'
+  startBtn.style.display = 'inline-block'
+  playingArena.style.display = 'flex'
+
   generateTicketBoxElements(ticketRows, ticketCols)
   const ticketArray = generateTicketArray(ticketRows, ticketCols)
   const ticketBoxes = ticket.querySelectorAll('.box')
@@ -47,11 +67,9 @@ function managePlayingArea() {
     box.textContent = content == "--" ? "" : content
     box.addEventListener('click', handleTicketBoxClick)
   })
-  winningComboBtns.forEach(btn => btn.addEventListener('click', checkPattern))
   ticketWrapper.style.display = 'block'
   generateTicketBtn.style.display = 'none'
   startBtn.style.display = 'block'
-  winningCombo.style.display = 'flex'
 }
 function generateTicketArray(rows, cols) {
   const ticketArray = []
@@ -75,7 +93,6 @@ function toggleMarked(ticketBox) {
   }
 }
 function callOutRandomNumber(interval=5000) {
-  const number = currentNumber.querySelector('.number')
   randomNumberCalloutInterval = setInterval(() => {
     const len = setOfRemainingNumbers.length
     const randIdx = Math.floor(Math.random() * len)
@@ -85,7 +102,7 @@ function callOutRandomNumber(interval=5000) {
     // // convert number to voice 
     speakTheNumber(calledOutNumber)
 
-    number.textContent = calledOutNumber
+    currentNumber.textContent = calledOutNumber
     // Mark the called out nummber in the master list 
     const masterListBox = document.querySelector(`.master-list .box${calledOutNumber}`)
     if (masterListBox) {
@@ -93,7 +110,7 @@ function callOutRandomNumber(interval=5000) {
     }
 
     if (len <= 0) {
-      number.textContent = '--'
+      currentNumber.textContent = '--'
       clearInterval(randomNumberCalloutInterval)
     }
   }, interval)
@@ -176,7 +193,13 @@ function insertRandomNumbersInTheTicket(ticket, rows, cols) {
       }
     } 
     // generate that many random numbers for the given column
-    const columnList = [...Array(10).keys()].map((x) => x + 1).map(x => x + 10*i)
+    const columnList = [...Array(10).keys()].map(x => x + 10*i)
+    if (columnList.includes(0)) {
+      columnList.shift()
+    }
+    if (columnList.includes(80)) {
+      columnList.push(90)
+    }
     const tempArr = []
     while (ones) {
       const idx = Math.floor(Math.random() * columnList.length)
@@ -233,7 +256,7 @@ function checkPattern() {
       break
   }
   if (!winItemInList(checkType) && isPattern) {
-    noPrize.style.display = 'none'
+    // noPrize.style.display = 'none'
     const prize = document.createElement('li')
     prize.classList.add(checkType)
     prize.textContent = message
@@ -324,4 +347,17 @@ function checkCorners(rows, cols) {
     }
   })
   return areCorners
+}
+function reset() {
+  setOfNumbers = [...Array(tambolaNumbersCount).keys()].map(x => x + 1)
+  setOfCalledOutNumbers = []
+  setOfRemainingNumbers = [...setOfNumbers]
+
+  masterListBoxes.forEach(box => box.classList.remove('lighten'))
+  generateTicketBtn.style.display = 'inline-block'
+  startBtn.style.display = 'none'
+
+  playingArena.style.display = 'none'
+  ticket.textContent = ''
+  prizesList.textContent = ''
 }
